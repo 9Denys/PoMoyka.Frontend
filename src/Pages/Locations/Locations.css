@@ -1,0 +1,88 @@
+body.locations {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  color: #222;
+  background-color: #EDECE7;
+}
+
+.locations-header {
+  background-color: #EDECE7;
+  padding: 20px 0;
+  text-align: center;
+  border-bottom: 1px solid #ccc;
+}
+
+.locations-nav {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+}
+
+.locations-link {
+  text-decoration: none;
+  color: #484746;
+  font-weight: bold;
+  font-size: 1.05rem;
+  transition: color 0.2s ease;
+}
+
+.locations-link:hover,
+.locations-link.active {
+  color: #66070F;
+}
+
+.locations-container {
+  display: flex;
+  height: 80vh;
+  border-bottom: 1px solid #ccc;
+}
+
+.locations-sidebar {
+  width: 32%;
+  background-color: #EDECE7;
+  padding: 20px 25px;
+  overflow-y: auto;
+  border-right: 1px solid #ccc;
+}
+
+.locations-title {
+  color: #66070F;
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin-bottom: 20px;
+}
+
+.location-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.location-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+.location-id {
+  font-weight: bold;
+  margin: 0;
+}
+
+.location-name {
+  margin: 4px 0 2px;
+  color: #66070F;
+}
+
+.location-address {
+  color: #484746;
+  font-size: 0.9rem;
+}
+
+.locations-map {
+  flex: 1;
+  min-height: 400px;
+}
