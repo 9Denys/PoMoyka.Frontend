@@ -1,0 +1,24 @@
+.header {
+  background-color: #EDECE7;
+  padding: 25px 0;
+  border-bottom: 1px solid #ccc;
+  text-align: center;
+}
+
+.header-nav {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+}
+
+.header-link {
+  text-decoration: none;
+  color: #484746;
+  font-weight: 600;
+  font-size: 1.05rem;
+  transition: color 0.2s ease;
+}
+
+.header-link:hover {
+  color: #66070F;
+}

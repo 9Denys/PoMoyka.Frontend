@@ -1,0 +1,39 @@
+.footer {
+  display: flex;
+  justify-content: space-between;
+  background-color: #EDECE7;
+  padding: 50px 60px;
+  flex-wrap: wrap;
+  border-top: 1px solid #ccc;
+}
+
+.footer-left h3 {
+  color: #66070F;
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.footer-left p {
+  margin: 5px 0 15px;
+  color: #484746;
+}
+
+.footer-employers {
+  text-decoration: none;
+  color: #66070F;
+  font-weight: bold;
+  border: 2px solid #66070F;
+  padding: 8px 14px;
+  border-radius: 6px;
+  transition: 0.2s;
+}
+
+.footer-employers:hover {
+  background-color: #66070F;
+  color: #fff;
+}
+
+.footer-right {
+  text-align: right;
+  color: #484746;
+}
