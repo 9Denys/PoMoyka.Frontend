@@ -12,7 +12,7 @@ function MainPage() {
           <h1 className="main-quote">
             Perfection is not attainable, but if<br />
             we chase perfection we can catch<br />
-            excellence.
+            excellence
             <br /><span className="main-author">– Vince Lombardi</span>
           </h1>
 
@@ -45,7 +45,7 @@ function MainPage() {
               <h3 className="main-services-title">Crafted Care for Every Car</h3>
               <p className="main-services-desc">
                 We believe that perfection lives in the smallest things. That's why we don't stop at what's visible — 
-                we clean, polish, and treat even the places you don't see.
+                we clean, polish, and treat even the places you don't see
               </p>
             </div>
 
