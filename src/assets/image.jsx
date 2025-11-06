@@ -12,4 +12,10 @@ export const images = {
   
   // Auth Page
   adminIcon: '/img/admin-icon.png',
+
+  // Worker Panel
+  userIcon: '/img/userIcon.png',       
+  sendIcon: '/img/sendIcon.png',       
+  logoutIcon: '/img/logoutIcon.png',   
+  
 };

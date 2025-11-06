@@ -1,0 +1,54 @@
+.worker-sendrequest {
+  background-color: #f5f3ef;
+  border-radius: 10px;
+  padding: 40px 60px;
+  color: #000;
+  height: 100%;
+}
+
+.request-title {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 25px;
+  color: #000000;
+}
+
+.request-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.request-textarea {
+  width: 100%;
+  max-width: 800px;
+  height: 200px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  padding: 12px;
+  font-size: 15px;
+  resize: none;
+  outline: none;
+  background-color: #ffffff;
+  transition: border-color 0.3s;
+}
+
+.request-textarea:focus {
+  border-color: #66070f;
+}
+
+.request-btn {
+  background-color: #66070f;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 25px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.request-btn:hover {
+  background-color: #9e6d72;
+}
