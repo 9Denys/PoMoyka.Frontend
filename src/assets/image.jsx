@@ -17,8 +17,12 @@ export const images = {
   userIcon: '/img/userIcon.png',       
   sendIcon: '/img/sendIcon.png',       
   logoutIcon: '/img/logoutIcon.png',   
+<<<<<<< HEAD
 
 
+=======
+  
+>>>>>>> 80504ffacba9e919a367e5723481d5240762b627
   //Admin
   servicesIcon: "/img/icon-services.png",
   centersIcon: "/img/icon-centers.png",
@@ -26,5 +30,8 @@ export const images = {
   requestIcon: "/img/icon-request.png",
   priceIcon: "/img/icon-price.png",
   userIconAdmin: "/img/icon-employers.png",
+<<<<<<< HEAD
 
+=======
+>>>>>>> 80504ffacba9e919a367e5723481d5240762b627
 };

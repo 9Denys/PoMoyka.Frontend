@@ -1,0 +1,74 @@
+.admin-sidebar {
+  background-color: #f8f8f8;
+  width: 230px;
+  height: 100vh;
+  border-right: 1px solid #ddd;
+  padding: 25px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* 👈 добавляем это */
+}
+
+
+.admin-title {
+  font-size: 1.4rem;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.admin-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: -20px; /* трохи підняли */
+}
+
+.admin-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #333;
+  padding: 10px 12px;
+  border-radius: 0 10px 10px 0;
+  transition: all 0.2s ease;
+}
+
+.admin-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.admin-link:hover,
+.admin-link.active {
+  background-color: #730a0a;
+  color: #fff;
+}
+
+/* коли активний — без лівого заокруглення (ефект злиття) */
+.admin-link.active {
+  border-radius: 0 10px 10px 0;
+  margin-left: -20px;
+  padding-left: 32px;
+}
+
+/* LOGOUT */
+.logout-section {
+  text-align: center;
+  margin-top: auto; /* 👈 гарантирует, что лог-аут внизу */
+  padding-bottom: 15px; /* немного места от нижнего края */
+}
+
+
+.logout-line {
+  border: none;
+  border-top: 1px solid #ccc;
+  margin: 15px 0;
+}
+
+.logout-link {
+  text-decoration: none;
+  color: #730a0a;
+  font-weight: 500;
+}
