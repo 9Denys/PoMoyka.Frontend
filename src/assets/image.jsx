@@ -18,4 +18,11 @@ export const images = {
   sendIcon: '/img/sendIcon.png',       
   logoutIcon: '/img/logoutIcon.png',   
   
+  //Admin
+  servicesIcon: "/img/icon-services.png",
+  centersIcon: "/img/icon-centers.png",
+  reportsIcon: "/img/icon-reports.png",
+  requestIcon: "/img/icon-request.png",
+  priceIcon: "/img/icon-price.png",
+  userIconAdmin: "/img/icon-employers.png",
 };

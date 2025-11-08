@@ -1,26 +1,41 @@
 .admin-sidebar {
-  background-color: #f8f8f8;
-  width: 230px;
-  height: 100vh;
-  border-right: 1px solid #ddd;
-  padding: 25px 20px;
+  width: 240px;
+  background-color: #ffffff;
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* 👈 добавляем это */
+  border-right: 1px solid #CFCFCF;
+  height: 100vh;
+  font-family: "Poppins", sans-serif;
+  color: rgba(0, 0, 0, 0.8);
 }
 
-
-.admin-title {
-  font-size: 1.4rem;
-  margin-bottom: 30px;
+/* Header */
+.admin-sidebar-header {
   text-align: center;
+  padding: 35px 20px 28px 20px;
+  border-bottom: 1px solid #CFCFCF;
+}
+
+.admin-panel-title {
+  font-size: 19px;
+  color: #000000;
+  font-weight: 600;
+  margin: 0;
+}
+
+.admin-name {
+  color: #66070F;
+  font-size: 14px;
+  margin-top: 10px;
+  font-weight: 500;
 }
 
 .admin-nav {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-top: -20px; /* трохи підняли */
+  gap: 12px;
+  margin-top: 25px;
+  padding-left: 0; /* убираем внутренний отступ */
 }
 
 .admin-link {
@@ -28,11 +43,21 @@
   align-items: center;
   gap: 10px;
   text-decoration: none;
-  color: #333;
-  padding: 10px 12px;
-  border-radius: 0 10px 10px 0;
-  transition: all 0.2s ease;
+  color: rgba(0, 0, 0, 0.8);
+  padding: 10px 16px 10px 25px; /* чуть больше слева для воздуха */
+  border-radius: 0 12px 12px 0;
+  transition: all 0.25s ease;
+  width: 100%; /* 👈 теперь тянется на всю ширину */
+  box-sizing: border-box;
 }
+
+.admin-link:hover,
+.admin-link.active {
+  background-color: #9E6D72;
+  color: #FFFFFF;
+  box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.15);
+}
+
 
 .admin-icon {
   width: 20px;
@@ -40,35 +65,27 @@
   object-fit: contain;
 }
 
-.admin-link:hover,
-.admin-link.active {
-  background-color: #730a0a;
-  color: #fff;
+/* Footer */
+.admin-sidebar-footer {
+  border-top: 1px solid #CFCFCF;
+  padding: 22px 20px 25px 20px;
+  display: flex;
+  justify-content: center;
+  margin-top: auto;
 }
 
-/* коли активний — без лівого заокруглення (ефект злиття) */
-.admin-link.active {
-  border-radius: 0 10px 10px 0;
-  margin-left: -20px;
-  padding-left: 32px;
-}
-
-/* LOGOUT */
-.logout-section {
-  text-align: center;
-  margin-top: auto; /* 👈 гарантирует, что лог-аут внизу */
-  padding-bottom: 15px; /* немного места от нижнего края */
-}
-
-
-.logout-line {
+.admin-logout {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   border: none;
-  border-top: 1px solid #ccc;
-  margin: 15px 0;
+  background: none;
+  color: rgba(0, 0, 0, 0.7);
+  cursor: pointer;
+  font-size: 13px;
+  transition: 0.3s;
 }
 
-.logout-link {
-  text-decoration: none;
-  color: #730a0a;
-  font-weight: 500;
+.admin-logout:hover {
+  color: #66070F;
 }
