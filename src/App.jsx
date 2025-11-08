@@ -9,6 +9,7 @@ import SendRequest from "./Pages/Worker/SendRequest.jsx";
 import AdminLayout from "./Components/AdminPanel/AdminLayout.jsx";
 import Employers from "./Pages/Admin/Employers.jsx"; 
 import Request from "./Pages/Admin/Request.jsx";
+import Reports from "./Pages/Admin/Reports.jsx";
 import "./App.css";
 
 function App() {
@@ -29,7 +30,7 @@ function App() {
           <Route path="employers" element={<Employers />} /> 
           <Route path="services" element={<h1>Services Page</h1>} />
           <Route path="centers" element={<h1>Centers Page</h1>} />
-          <Route path="reports" element={<h1>Reports Page</h1>} />
+          <Route path="reports" element={<Reports />} />
           <Route path="request" element={<Request />} /> 
           <Route path="setprice" element={<h1>Set Price Page</h1>} />
         </Route>
