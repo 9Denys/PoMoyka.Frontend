@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MainPage from "./Pages/main_page.jsx";
 import Locations from "./Pages/Locations/Locations.jsx";
@@ -11,15 +10,6 @@ import AdminLayout from "./Components/AdminPanel/AdminLayout.jsx";
 import Employers from "./Pages/Admin/Employers.jsx"; 
 import Request from "./Pages/Admin/Request.jsx";
 import "./App.css";
-=======
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import MainPage from './Pages/main_page.jsx';
-import Locations from './Pages/Locations/Locations.jsx';
-import Services from './Pages/Services/Services.jsx';
-import Auth from './Pages/Auth/Auth.jsx';
-import AdminPanel from './Pages/AdminPanel/AdminPanel.jsx';
-import './App.css';
->>>>>>> 80504ffacba9e919a367e5723481d5240762b627
 
 function App() {
   return (
@@ -29,7 +19,6 @@ function App() {
         <Route path="/Locations" element={<Locations />} />
         <Route path="/Services" element={<Services />} />
         <Route path="/Auth" element={<Auth />} />
-<<<<<<< HEAD
 
         <Route path="/worker" element={<WorkerLayout />}>
           <Route path="myinfo" element={<MyInfo />} />
@@ -44,9 +33,6 @@ function App() {
           <Route path="request" element={<Request />} /> 
           <Route path="setprice" element={<h1>Set Price Page</h1>} />
         </Route>
-=======
-        <Route path="/admin" element={<AdminPanel />} />
->>>>>>> 80504ffacba9e919a367e5723481d5240762b627
       </Routes>
     </Router>
   );
