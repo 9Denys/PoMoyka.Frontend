@@ -1,0 +1,68 @@
+.admin-request {
+  background-color: #f5f3ef;
+  padding: 30px 40px;
+  height: 100%;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.request-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #000;
+  margin-bottom: 15px;
+}
+
+.request-table {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.request-header {
+  display: grid;
+  grid-template-columns: 1.2fr 3.5fr 0.6fr;
+  background-color: #f9f9f9;
+  padding: 10px 15px;
+  border-bottom: 1px solid #ccc;
+  font-weight: 600;
+  font-size: 14px;
+  color: #000;
+}
+
+.request-row {
+  display: grid;
+  grid-template-columns: 1.2fr 3.5fr 0.6fr;
+  padding: 10px 15px;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.request-row:hover {
+  background-color: #f6f4f2;
+}
+
+.request-name {
+  font-weight: 600;
+  color: #000;
+}
+
+.request-message {
+  color: rgba(0, 0, 0, 0.8);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.request-time {
+  text-align: right;
+  font-weight: 600;
+  color: #000;
+}
+
+.request-row:last-child {
+  border-bottom: none;
+}
