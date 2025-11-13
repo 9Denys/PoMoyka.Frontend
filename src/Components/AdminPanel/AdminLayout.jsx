@@ -30,25 +30,25 @@ export default function AdminLayout() {
             </button>
           </Link>
 
-          <Link to="/admin/services">
+          <Link to="/admin/adminservices">
             <button
               className={`admin-menu-item ${
-                location.pathname === "/admin/services" ? "active" : ""
+                location.pathname === "/admin/adminservices" ? "active" : ""
               }`}
             >
               <img src={images.servicesIcon} alt="Services" className="menu-icon" />
-              Services
+              AdminServices
             </button>
           </Link>
 
-          <Link to="/admin/centers">
+          <Link to="/admin/admincenters">
             <button
               className={`admin-menu-item ${
-                location.pathname === "/admin/centers" ? "active" : ""
+                location.pathname === "/admin/admincenters" ? "active" : ""
               }`}
             >
-              <img src={images.centersIcon} alt="Centers" className="menu-icon" />
-              Centers
+              <img src={images.centersIcon} alt="AdminCenters" className="menu-icon" />
+              AdminCenters
             </button>
           </Link>
 
@@ -74,14 +74,14 @@ export default function AdminLayout() {
             </button>
           </Link>
 
-          <Link to="/admin/setprice">
+          <Link to="/admin/adminsetprice">
             <button
               className={`admin-menu-item ${
-                location.pathname === "/admin/setprice" ? "active" : ""
+                location.pathname === "/admin/adminsetprice" ? "active" : ""
               }`}
             >
-              <img src={images.priceIcon} alt="Set price" className="menu-icon" />
-              Set price
+              <img src={images.priceIcon} alt="Admin Set price" className="menu-icon" />
+              Admin Set price
             </button>
           </Link>
         </nav>

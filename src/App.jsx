@@ -10,7 +10,10 @@ import AdminLayout from "./Components/AdminPanel/AdminLayout.jsx";
 import Employers from "./Pages/Admin/Employers.jsx"; 
 import Request from "./Pages/Admin/Request.jsx";
 import Reports from "./Pages/Admin/Reports.jsx";
+import AdminServices from "./Pages/Admin/AdminServices.jsx";
 import "./App.css";
+import AdminCenters from "./Pages/Admin/AdminCenters.jsx";
+import AdminSetPrice from "./Pages/Admin/AdminSetPrice.jsx";
 
 function App() {
   return (
@@ -28,11 +31,11 @@ function App() {
 
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="employers" element={<Employers />} /> 
-          <Route path="services" element={<h1>Services Page</h1>} />
-          <Route path="centers" element={<h1>Centers Page</h1>} />
+          <Route path="adminservices" element={<AdminServices />} />
+          <Route path="admincenters" element={<AdminCenters/>} />
           <Route path="reports" element={<Reports />} />
           <Route path="request" element={<Request />} /> 
-          <Route path="setprice" element={<h1>Set Price Page</h1>} />
+          <Route path="adminsetprice" element={<AdminSetPrice/>} />
         </Route>
       </Routes>
     </Router>
