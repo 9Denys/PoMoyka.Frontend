@@ -1,13 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./AdminLayout.css";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { images } from "../../assets/image.jsx";
+import { tokenService } from "../../core/tokenService";
+import { getMyProfile } from "../../api/userApi";
 
 export default function AdminLayout() {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const [adminName, setAdminName] = useState("Admin");
+
+  useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        const profile = await getMyProfile();
+        if (profile && profile.firstName) {
+          setAdminName(profile.firstName);
+        }
+      } catch (err) {
+        console.error("Failed to load admin profile:", err);
+      }
+    };
+
+    loadProfile();
+  }, []);
+
   const handleLogout = () => {
+    tokenService.clearTokens();
+    tokenService.clearUserRole();
+    localStorage.removeItem("userFirstName");
+
     navigate("/Auth");
   };
 
@@ -16,6 +39,7 @@ export default function AdminLayout() {
       <aside className="admin-sidebar">
         <div className="admin-header">
           <h3 className="admin-title">Admin panel</h3>
+          <p className="admin-name">{adminName}</p>
         </div>
 
         <nav className="admin-menu">

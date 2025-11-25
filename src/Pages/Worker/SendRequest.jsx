@@ -22,8 +22,8 @@ export default function SendRequest() {
     setLoading(true);
     try {
       await createStatement({
-        topic: topic || "Request from worker", 
-        message,
+        topic: topic.trim() || "Request from worker",
+        message: message.trim(),
       });
 
       setSuccess("Your request has been sent");

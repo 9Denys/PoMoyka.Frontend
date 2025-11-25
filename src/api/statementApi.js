@@ -6,7 +6,6 @@ export function createStatement({ topic, message }) {
     body: {
       topic,
       message,
-      status: "unread", 
     },
   });
 }
