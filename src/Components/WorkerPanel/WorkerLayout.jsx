@@ -1,14 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./WorkerLayout.css";
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom"; 
-import { images } from "../../assets/image.jsx"; 
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { images } from "../../assets/image.jsx";
+import { tokenService } from "../../core/tokenService";
+import { getMyProfile } from "../../api/userApi"; 
 
 function WorkerLayout() {
   const location = useLocation();
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
+
+  const [firstName, setFirstName] = useState("Worker");
+
+  useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        const profile = await getMyProfile();
+        if (profile && profile.firstName) {
+          setFirstName(profile.firstName);
+        }
+      } catch (err) {
+        console.error("Failed to load profile in WorkerLayout:", err);
+      }
+    };
+
+    loadProfile();
+  }, []);
 
   const handleLogout = () => {
-    navigate("/Auth"); 
+    tokenService.clearTokens();
+    tokenService.clearUserRole();
+
+    navigate("/Auth");
   };
 
   return (
@@ -16,7 +38,7 @@ function WorkerLayout() {
       <aside className="worker-sidebar">
         <div className="worker-sidebar-header">
           <h3 className="worker-panel-title">Coworker panel</h3>
-          <p className="worker-name">Tim Kadilak</p>
+          <p className="worker-name">{firstName}</p>
         </div>
 
         <div className="worker-menu">
@@ -26,11 +48,7 @@ function WorkerLayout() {
                 location.pathname === "/worker/myinfo" ? "active" : ""
               }`}
             >
-              <img
-                src={images.userIcon}
-                alt="My Info"
-                className="menu-icon"
-              />
+              <img src={images.userIcon} alt="My Info" className="menu-icon" />
               My info
             </button>
           </Link>
