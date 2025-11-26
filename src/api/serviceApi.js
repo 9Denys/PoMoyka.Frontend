@@ -2,7 +2,7 @@ const API_BASE_URL = 'https://pomoyka-backend.onrender.com';
 
 export async function getAllServices() {
   const accessToken = localStorage.getItem('accessToken');
-  console.log('Token:', accessToken); // Отладка
+  console.log('Token:', accessToken); 
   
   const response = await fetch(`${API_BASE_URL}/api/Service/GetAll`, {
     method: 'GET',
@@ -12,14 +12,14 @@ export async function getAllServices() {
     },
   });
 
-  console.log('Response status:', response.status); // Отладка
+  console.log('Response status:', response.status); 
   
   if (!response.ok) {
     throw new Error(`Failed to fetch services: ${response.status}`);
   }
 
   const data = await response.json();
-  console.log('Services data:', data); // Отладка
+  console.log('Services data:', data); 
   return data;
 }
 

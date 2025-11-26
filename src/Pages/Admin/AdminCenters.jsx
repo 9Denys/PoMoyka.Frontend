@@ -12,20 +12,18 @@ export default function AdminCenters() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Получение всех центров и их полной информации
   const fetchCenters = async () => {
     try {
       setLoading(true);
       const basicCenters = await getAllCenters();
       
-      // Получаем полную информацию для каждого центра
       const fullCenters = await Promise.all(
         basicCenters.map(async (center) => {
           try {
             return await getCenterById(center.id);
           } catch (err) {
             console.error(`Failed to fetch details for center ${center.id}:`, err);
-            return center; // Возвращаем базовую информацию если не удалось получить полную
+            return center; 
           }
         })
       );
@@ -73,14 +71,12 @@ export default function AdminCenters() {
       };
 
       if (selectedCenter.id) {
-        // Обновление существующего центра
         await updateCenter(selectedCenter.id, centerData);
       } else {
-        // Создание нового центра
         await createCenter(centerData);
       }
 
-      await fetchCenters(); // Обновляем список
+      await fetchCenters(); 
     } catch (err) {
       setError(err.message);
     } finally {
@@ -112,7 +108,6 @@ export default function AdminCenters() {
       await deleteCenter(selectedCenter.id);
       await fetchCenters();
       
-      // После удаления выбираем первый доступный центр или сбрасываем форму
       if (centers.length > 1) {
         const remainingCenters = centers.filter(c => c.id !== selectedCenter.id);
         if (remainingCenters.length > 0) {

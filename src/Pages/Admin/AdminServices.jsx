@@ -12,7 +12,6 @@ export default function AdminServices() {
   const API_BASE_URL = 'https://pomoyka-backend.onrender.com';
   const accessToken = localStorage.getItem('accessToken');
 
-  // Получение всех сервисов
   const fetchServices = async () => {
     try {
       setLoading(true);
@@ -61,7 +60,7 @@ export default function AdminServices() {
       setError("");
 
       if (selectedService.id) {
-        // Обновление существующего сервиса
+        
         const response = await fetch(`${API_BASE_URL}/api/Service/Update/${selectedService.id}`, {
           method: 'PUT',
           headers: {
@@ -75,9 +74,9 @@ export default function AdminServices() {
           throw new Error('Failed to update service');
         }
 
-        await fetchServices(); // Обновляем список
+        await fetchServices(); 
       } else {
-        // Создание нового сервиса
+        
         const response = await fetch(`${API_BASE_URL}/api/Service/Create`, {
           method: 'POST',
           headers: {
@@ -91,7 +90,7 @@ export default function AdminServices() {
           throw new Error('Failed to create service');
         }
 
-        await fetchServices(); // Обновляем список
+        await fetchServices(); 
       }
     } catch (err) {
       setError(err.message);
@@ -130,7 +129,7 @@ export default function AdminServices() {
         throw new Error('Failed to delete service');
       }
 
-      // После удаления выбираем первый доступный сервис или сбрасываем форму
+      
       await fetchServices();
       if (services.length > 1) {
         const remainingServices = services.filter(s => s.id !== selectedService.id);

@@ -51,7 +51,6 @@ export async function createCenter(centerData) {
     throw new Error('Failed to create center');
   }
 
-  // Если ответ пустой, не пытаемся парсить JSON
   const contentLength = response.headers.get('content-length');
   if (contentLength === '0' || response.status === 204) {
     return null;
@@ -75,7 +74,6 @@ export async function updateCenter(id, centerData) {
     throw new Error('Failed to update center');
   }
 
-  // Если ответ пустой, не пытаемся парсить JSON
   const contentLength = response.headers.get('content-length');
   if (contentLength === '0' || response.status === 204) {
     return null;
@@ -97,7 +95,6 @@ export async function deleteCenter(id) {
     throw new Error('Failed to delete center');
   }
 
-  // Если ответ пустой, не пытаемся парсить JSON
   const contentLength = response.headers.get('content-length');
   if (contentLength === '0' || response.status === 204) {
     return null;
