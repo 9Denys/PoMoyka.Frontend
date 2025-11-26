@@ -1,3 +1,4 @@
+
 import { apiRequest } from "./httpClient";
 
 export function createStatement({ topic, message }) {
@@ -7,5 +8,17 @@ export function createStatement({ topic, message }) {
       topic,
       message,
     },
+  });
+}
+
+export function getAllStatements() {
+  return apiRequest("/api/Statement/GetAllStatements", {
+    method: "GET",
+  });
+}
+
+export function getStatementById(id) {
+  return apiRequest(`/api/Statement/GetStatementById/${id}`, {
+    method: "GET",
   });
 }
