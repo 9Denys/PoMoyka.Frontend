@@ -1,34 +1,58 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./MyInfo.css";
 import { images } from "../../assets/image.jsx";
-import { getMyProfile, updateMyProfile } from "../../api/userApi";
+import {
+  getMyProfile,
+  updateMyProfile,
+  getUserImageUrl,
+  uploadUserImage,
+  deleteUserImage,
+} from "../../api/userApi";
 
 export default function MyInfo() {
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
     email: "",
-    password: "", 
+    password: "",
   });
 
-  const [loading, setLoading] = useState(false);   
-  const [saving, setSaving] = useState(false);     
+  const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  const [avatarUrl, setAvatarUrl] = useState(null);
+  const [avatarLoading, setAvatarLoading] = useState(false);
+
+  const fileInputRef = useRef(null);
+
   useEffect(() => {
-    const loadProfile = async () => {
+    const loadData = async () => {
       setLoading(true);
       setError("");
+
       try {
-        const profile = await getMyProfile();
+        const [profile, imageData] = await Promise.all([
+          getMyProfile(),
+          getUserImageUrl().catch(() => null),
+        ]);
 
         setForm({
           firstName: profile.firstName || "",
           lastName: profile.lastName || "",
           email: profile.email || "",
-          password: "", 
+          password: "",
         });
+
+        if (imageData) {
+          const url =
+            typeof imageData === "string"
+              ? imageData.trim()
+              : imageData.imageUrl || imageData.url || "";
+
+          if (url) setAvatarUrl(url);
+        }
       } catch (err) {
         console.error(err);
         setError(err.message || "Failed to load profile");
@@ -37,7 +61,7 @@ export default function MyInfo() {
       }
     };
 
-    loadProfile();
+    loadData();
   }, []);
 
   const handleChange = (e) => {
@@ -73,14 +97,99 @@ export default function MyInfo() {
     }
   };
 
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleImageChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setError("");
+    setSuccess("");
+    setAvatarLoading(true);
+
+    const localUrl = URL.createObjectURL(file);
+    setAvatarUrl(localUrl);
+
+    try {
+      await uploadUserImage(file);
+
+      const imageData = await getUserImageUrl().catch(() => null);
+
+      if (imageData) {
+        const url =
+          typeof imageData === "string"
+            ? imageData.trim()
+            : imageData.imageUrl || imageData.url || "";
+
+        if (url) setAvatarUrl(url);
+      }
+
+      setSuccess("Avatar updated successfully");
+    } catch (err) {
+      console.error(err);
+      setError(err.message || "Failed to upload image");
+    } finally {
+      setAvatarLoading(false);
+      e.target.value = "";
+    }
+  };
+
+  const handleDeleteImage = async () => {
+    setError("");
+    setSuccess("");
+    setAvatarLoading(true);
+
+    try {
+      await deleteUserImage();
+      setAvatarUrl(null);
+      setSuccess("Avatar deleted successfully");
+    } catch (err) {
+      console.error(err);
+      setError(err.message || "Failed to delete image");
+    } finally {
+      setAvatarLoading(false);
+    }
+  };
+
   return (
     <div className="worker-myinfo">
       <h1 className="info-title">My Info</h1>
 
       <form className="info-form" onSubmit={handleSubmit}>
+       
         <div className="info-avatar">
-          <img src={images.workerAvatar} alt="Avatar" className="avatar-img" />
-          <p className="edit-label">Edit</p>
+          <img
+            src={avatarUrl || images.workerAvatar}
+            alt="Avatar"
+            className="avatar-img"
+            onClick={handleAvatarClick}
+            style={{ cursor: "pointer" }}
+          />
+
+          <p className="edit-label" onClick={handleAvatarClick}>
+            {avatarLoading ? "Uploading..." : "Edit"}
+          </p>
+
+         {/*  {avatarUrl && (
+            <button
+              type="button"
+              className="delete-photo-btn"
+              onClick={handleDeleteImage}
+              disabled={avatarLoading || loading || saving}
+            >
+              Delete photo 
+            </button>
+          )} */}
+
+          <input
+            type="file"
+            accept="image/*"
+            ref={fileInputRef}
+            style={{ display: "none" }}
+            onChange={handleImageChange}
+          />
         </div>
 
         <div className="info-fields">
