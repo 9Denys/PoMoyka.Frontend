@@ -1,65 +1,250 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import {
+  getAllEmployees,
+  createEmployee,
+  updateEmployee,
+  deleteEmployee,
+  getAllCenters
+} from "../../api/employeeApi";
+
 import "./Employers.css";
-import { images } from "../../assets/image.jsx";
 
 export default function Employers() {
+  const [list, setList] = useState([]);
+  const [centers, setCenters] = useState([]);
+  const [selected, setSelected] = useState(null);
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [centerId, setCenterId] = useState("");
+
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const loadEmployees = async () => {
+    try {
+      setLoading(true);
+      const data = await getAllEmployees();
+      setList(data);
+
+      if (data.length > 0 && !selected) {
+        selectEmployee(data[0]);
+      }
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadCenters = async () => {
+    try {
+      const centersData = await getAllCenters();
+      setCenters(centersData);
+    } catch (e) {
+      console.error("Failed to load centers:", e);
+    }
+  };
+
+  useEffect(() => {
+    loadEmployees();
+    loadCenters();
+  }, []);
+
+  const selectEmployee = (emp) => {
+    setSelected(emp);
+    setFirstName(emp.firstName || "");
+    setLastName(emp.lastName || "");
+    setEmail(emp.email || "");
+    setCenterId(emp.centerId || "");
+    setPassword("");
+    setError("");
+  };
+
+  const handleAddNew = () => {
+    setSelected(null);
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setPassword("");
+    setCenterId("");
+    setError("");
+  };
+
+  const handleSubmit = async () => {
+    try {
+      setLoading(true);
+      setError("");
+
+      // Валидация
+      if (!firstName || !lastName || !email || !centerId) {
+        setError("Please fill all required fields");
+        return;
+      }
+
+      // Для создания сотрудника пароль обязателен
+      if (!selected?.id && !password) {
+        setError("Password is required for new employee");
+        return;
+      }
+
+      const payload = {
+        firstName,
+        lastName,
+        email,
+        centerId
+      };
+
+      // Добавляем пароль только если он указан (для создания или изменения)
+      if (password) {
+        payload.password = password;
+      }
+
+      if (selected?.id) {
+        // Update
+        await updateEmployee(selected.id, payload);
+      } else {
+        // Create
+        await createEmployee(payload);
+      }
+
+      await loadEmployees();
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!selected?.id) return;
+
+    const ok = window.confirm(`Delete employee ${selected.firstName} ${selected.lastName}?`);
+    if (!ok) return;
+
+    try {
+      setLoading(true);
+      await deleteEmployee(selected.id);
+      await loadEmployees();
+
+      // Сбрасываем форму после удаления
+      if (list.length > 1) {
+        const remainingEmployees = list.filter(emp => emp.id !== selected.id);
+        if (remainingEmployees.length > 0) {
+          selectEmployee(remainingEmployees[0]);
+        } else {
+          handleAddNew();
+        }
+      } else {
+        handleAddNew();
+      }
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="admin-employers">
-      <div className="employers-list">
-        <h2 className="employers-title">Staff Members</h2>
+    <div className="adminservices-container">
+      <div className="adminservices-left">
+        {list.map(emp => (
+          <button
+            key={emp.id}
+            className={`adminservices-item ${selected?.id === emp.id ? "active" : ""}`}
+            onClick={() => selectEmployee(emp)}
+            disabled={loading}
+          >
+            <span className="adminservices-icon">👤</span>
+            {emp.firstName} {emp.lastName}
+          </button>
+        ))}
 
-        <div className="employer-card active">
-          <img src={images.workerAvatar} alt="Tim Kadilak" className="employer-avatar" />
-          <span className="employer-name">Tim Kadilak</span>
-        </div>
-
-        <div className="employer-card">
-          <img src={images.worker2} alt="Hemec Durak" className="employer-avatar" />
-          <span className="employer-name">Hemec Durak</span>
-        </div>
-
-        <div className="employer-card">
-          <img src={images.worker3} alt="Tom Kruz" className="employer-avatar" />
-          <span className="employer-name">Tom Kruz</span>
-        </div>
-
-        <div className="employer-card">
-          <img src={images.worker4} alt="Jon Freak" className="employer-avatar" />
-          <span className="employer-name">Jon Freak</span>
-        </div>
-
-        <button className="add-employee">
-          + Add new staff members
+        <button className="adminservices-add" onClick={handleAddNew} disabled={loading}>
+          <span className="adminservices-add-icon">＋</span> Add new employee
         </button>
       </div>
 
-      <div className="employer-details">
-        <div className="employer-photo-section">
-          <img src={images.workerAvatar} alt="Avatar" className="employer-photo" />
-          <p className="edit-text">Edit</p>
+      <div className="adminservices-right">
+        <div className="adminservices-form">
+          <div className="adminservices-input-group">
+            <label>First Name *</label>
+            <input 
+              value={firstName} 
+              onChange={e => setFirstName(e.target.value)} 
+              disabled={loading}
+              placeholder="Enter first name"
+            />
+          </div>
+
+          <div className="adminservices-input-group">
+            <label>Last Name *</label>
+            <input 
+              value={lastName} 
+              onChange={e => setLastName(e.target.value)} 
+              disabled={loading}
+              placeholder="Enter last name"
+            />
+          </div>
+
+          <div className="adminservices-input-group">
+            <label>Email *</label>
+            <input 
+              value={email} 
+              onChange={e => setEmail(e.target.value)} 
+              disabled={loading}
+              placeholder="Enter email"
+            />
+          </div>
+
+          <div className="adminservices-input-group">
+            <label>Password {!selected?.id && "*"}</label>
+            <input
+              type="password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              disabled={loading}
+              placeholder={selected?.id ? "Leave empty to keep old password" : "Enter password"}
+            />
+          </div>
+
+          <div className="adminservices-input-group">
+            <label>Center *</label>
+            <select
+              value={centerId}
+              onChange={e => setCenterId(e.target.value)}
+              disabled={loading || centers.length === 0}
+            >
+              <option value="">Select a center</option>
+              {centers.map(center => (
+                <option key={center.id} value={center.id}>
+                  {center.name}
+                </option>
+              ))}
+            </select>
+            {centers.length === 0 && (
+              <p className="centers-hint">
+                No centers available. Please create centers first.
+              </p>
+            )}
+          </div>
+
+          {error && <p className="auth-error">{error}</p>}
+
+          <button className="adminservices-submit" onClick={handleSubmit} disabled={loading}>
+            {loading ? "Loading..." : "Submit"}
+          </button>
         </div>
 
-        <form className="employer-form">
-          <label>First name</label>
-          <input type="text" placeholder="Enter first name" />
-
-          <label>Last name</label>
-          <input type="text" placeholder="Enter last name" />
-
-          <label>Email</label>
-          <input type="email" placeholder="Enter email" />
-
-          <label>Password</label>
-          <input type="password" placeholder="********" />
-
-          <label>Centers</label>
-          <input type="text" placeholder="Enter assigned centers" />
-
-          <div className="form-buttons">
-            <button type="submit" className="save-btn">Save</button>
-            <button type="button" className="delete-btn">Delete account</button>
-          </div>
-        </form>
+        <button
+          className="adminservices-delete"
+          onClick={handleDelete}
+          disabled={!selected?.id || loading}
+        >
+          Delete employee
+        </button>
       </div>
     </div>
   );

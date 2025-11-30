@@ -1,4 +1,4 @@
-.admin-employers {
+.adminservices-container {
   display: flex;
   gap: 40px;
   background-color: #f5f3ef;
@@ -7,21 +7,14 @@
   box-sizing: border-box;
 }
 
-.employers-list {
+.adminservices-left {
   width: 35%;
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
-.employers-title {
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 10px;
-  color: #000;
-}
-
-.employer-card {
+.adminservices-item {
   display: flex;
   align-items: center;
   gap: 15px;
@@ -31,25 +24,26 @@
   border: 1px solid #ccc;
   cursor: pointer;
   transition: all 0.3s ease;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  text-align: left;
+  width: 100%;
 }
 
-.employer-card:hover {
+.adminservices-item:hover {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
-.employer-card.active {
+.adminservices-item.active {
   background-color: #66070f;
   color: #fff;
 }
 
-.employer-avatar {
-  width: 45px;
-  height: 45px;
-  border-radius: 8px;
-  object-fit: cover;
+.adminservices-icon {
+  font-size: 16px;
 }
 
-.add-employee {
+.adminservices-add {
   margin-top: 10px;
   padding: 10px 14px;
   border: 1px solid #66070f;
@@ -59,122 +53,140 @@
   cursor: pointer;
   font-weight: 500;
   transition: 0.3s;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  width: 100%;
 }
 
-.add-employee:hover {
+.adminservices-add:hover {
   background-color: #66070f;
   color: #fff;
 }
 
-.employer-details {
+.adminservices-add-icon {
+  margin-right: 5px;
+}
+
+.adminservices-right {
   flex: 1;
   background-color: #fff;
   border-radius: 10px;
-  padding: 10px;
+  padding: 30px;
   border: 1px solid #ccc;
   display: flex;
   flex-direction: column;
-  justify-content: space-between; 
+  justify-content: space-between;
 }
 
-.employer-top {
-  display: flex;
-  align-items: flex-start;
-  gap: 40px;
-}
-
-.employer-photo-section {
+.adminservices-form {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  gap: 20px;
 }
 
-.employer-photo {
-  width: 95px;
-  height: 95px;
-  border-radius: 10px;
-  object-fit: cover;
-  border: 1px solid #ccc;
-  margin-bottom: 8px;
-}
-
-.edit-text {
-  color: #66070f;
-  font-size: 14px;
-  cursor: pointer;
-  text-decoration: underline;
-  transition: 0.3s;
-}
-
-.edit-text:hover {
-  color: #9E6D72;
-}
-
-.employer-form {
-  flex: 1;
+.adminservices-input-group {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  margin-bottom: 40px; 
+  gap: 8px;
 }
 
-.employer-form label {
+.adminservices-input-group label {
   font-size: 15px;
   font-weight: 500;
   color: #000;
+  font-family: "Poppins", sans-serif;
 }
 
-.employer-form input {
-  padding: 8px 10px;
+.adminservices-input-group input,
+.adminservices-input-group select {
+  padding: 12px 14px;
   border: 1px solid #ccc;
   border-radius: 6px;
   font-family: "Poppins", sans-serif;
   font-size: 14px;
   background-color: #fff;
   transition: 0.2s;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.employer-form input:focus {
+/* Увеличиваем размер выпадающего списка центров */
+.adminservices-input-group select {
+  height: 46px;
+  font-size: 15px;
+}
+
+.adminservices-input-group input:focus,
+.adminservices-input-group select:focus {
   border-color: #66070F;
+  outline: none;
 }
 
-.form-buttons {
-  display: flex;
-  flex-direction: column; 
-  align-items: center;
-  gap: 12px;
-  margin-top: auto;
-  padding-top: 15px;
-  border-top: 1px solid #ddd;
+.adminservices-input-group input:disabled,
+.adminservices-input-group select:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+  opacity: 0.7;
 }
 
-.save-btn {
-  align-self: flex-end; 
+.adminservices-submit {
+  align-self: flex-start;
   background-color: #66070f;
   color: white;
   border: none;
   border-radius: 8px;
-  padding: 8px 20px;
+  padding: 12px 30px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 15px;
   transition: 0.3s;
+  font-family: "Poppins", sans-serif;
+  margin-top: 10px;
 }
 
-.save-btn:hover {
+.adminservices-submit:hover:not(:disabled) {
   background-color: #9E6D72;
 }
 
-.delete-btn {
+.adminservices-submit:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.adminservices-delete {
   background: none;
   border: none;
   color: #66070f;
   cursor: pointer;
   text-decoration: underline;
   font-size: 14px;
-  align-self: center; 
-  margin-top: -20px; 
+  align-self: center;
+  margin-top: 20px;
+  padding: 8px 16px;
+  font-family: "Poppins", sans-serif;
+  transition: 0.3s;
 }
 
-.delete-btn:hover {
+.adminservices-delete:hover:not(:disabled) {
   color: #9E6D72;
+}
+
+.adminservices-delete:disabled {
+  color: #cccccc;
+  cursor: not-allowed;
+  text-decoration: none;
+}
+
+.auth-error {
+  color: red;
+  margin: 10px 0;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+}
+
+/* Стили для подсказки о центрах */
+.centers-hint {
+  color: #666;
+  font-size: 12px;
+  margin: 5px 0 0 0;
+  font-family: "Poppins", sans-serif;
 }
