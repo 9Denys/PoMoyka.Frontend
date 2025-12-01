@@ -34,22 +34,39 @@ export default function Reports() {
       const data = await getTopCenters({ from: fromDate, to: toDate });
       console.log("TOP CENTERS:", data);
 
-      const list = Array.isArray(data) ? data : data.topCenters || data.centers || [];
+      const list = Array.isArray(data)
+        ? data
+        : data.topCenters || data.centers || [];
 
       setCenters(list);
 
-      const sumQuantity = list.reduce(
-        (acc, item) => acc + (item.quantity || item.totalQuantity || 0),
+      const sumQuantityFromList = list.reduce(
+        (acc, item) => acc + (item.quantity ?? item.totalQuantity ?? 0),
         0
       );
 
-      const sumCash = list.reduce(
-        (acc, item) => acc + (item.totalCash || item.totalAmount || 0),
+      const sumCashFromList = list.reduce(
+        (acc, item) =>
+          acc +
+          (item.cash ??
+            item.totalCash ??
+            item.totalAmount ??
+            0),
         0
       );
 
-      setTotalQuantity(sumQuantity);
-      setTotalCash(sumCash);
+      setTotalQuantity(
+        data.totalQuantity ??
+          data.totalSales ??
+          sumQuantityFromList
+      );
+
+      setTotalCash(
+        data.totalCash ??
+          data.totalRevenue ??
+          data.totalAmount ??
+          sumCashFromList
+      );
     } catch (err) {
       console.error(err);
       setError(err.message || "Failed to load statistics");
@@ -163,7 +180,11 @@ export default function Reports() {
           />
         </div>
 
-        <button className="check-btn" onClick={handleCheck} disabled={loading}>
+        <button
+          className="check-btn"
+          onClick={handleCheck}
+          disabled={loading}
+        >
           {loading ? "Loading..." : "Check"}
         </button>
 
