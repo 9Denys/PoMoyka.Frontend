@@ -1,4 +1,3 @@
-
 import { apiRequest } from "./httpClient";
 
 export function createStatement({ topic, message }) {
