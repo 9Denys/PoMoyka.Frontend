@@ -1,4 +1,4 @@
-import './locations.css';
+import './Locations.css';
 import Header from '../../Components/Header/Header';
 import Footer from '../../Components/Footer/Footer';
 
