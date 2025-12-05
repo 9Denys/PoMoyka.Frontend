@@ -78,13 +78,11 @@ export default function Employers() {
       setLoading(true);
       setError("");
 
-      // Валидация
       if (!firstName || !lastName || !email || !centerId) {
         setError("Please fill all required fields");
         return;
       }
 
-      // Для создания сотрудника пароль обязателен
       if (!selected?.id && !password) {
         setError("Password is required for new employee");
         return;
@@ -97,16 +95,16 @@ export default function Employers() {
         centerId
       };
 
-      // Добавляем пароль только если он указан (для создания или изменения)
       if (password) {
         payload.password = password;
       }
 
       if (selected?.id) {
-        // Update
+      
         await updateEmployee(selected.id, payload);
+
       } else {
-        // Create
+        
         await createEmployee(payload);
       }
 
@@ -129,7 +127,6 @@ export default function Employers() {
       await deleteEmployee(selected.id);
       await loadEmployees();
 
-      // Сбрасываем форму после удаления
       if (list.length > 1) {
         const remainingEmployees = list.filter(emp => emp.id !== selected.id);
         if (remainingEmployees.length > 0) {

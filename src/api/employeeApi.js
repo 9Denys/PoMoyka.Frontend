@@ -1,12 +1,10 @@
 const API_BASE_URL = "https://pomoyka-backend.onrender.com";
 
-// Вспомогательная функция для обработки ответов
 async function handleResponse(response) {
   if (!response.ok) {
     throw new Error(`Request failed with status ${response.status}`);
   }
 
-  // Проверяем, есть ли тело ответа
   const contentLength = response.headers.get('content-length');
   if (contentLength === '0' || response.status === 204) {
     return null;
@@ -15,7 +13,6 @@ async function handleResponse(response) {
   return await response.json();
 }
 
-// Получить все центры для выпадающего списка
 export async function getAllCenters() {
   const token = localStorage.getItem("accessToken");
 
@@ -30,7 +27,6 @@ export async function getAllCenters() {
   return handleResponse(response);
 }
 
-// Получить всех сотрудников
 export async function getAllEmployees() {
   const token = localStorage.getItem("accessToken");
 
@@ -45,7 +41,6 @@ export async function getAllEmployees() {
   return handleResponse(response);
 }
 
-// Получить сотрудника по ID
 export async function getEmployeeById(id) {
   const token = localStorage.getItem("accessToken");
 
@@ -60,7 +55,6 @@ export async function getEmployeeById(id) {
   return handleResponse(response);
 }
 
-// Создать сотрудника
 export async function createEmployee(employeeData) {
   const token = localStorage.getItem("accessToken");
 
@@ -76,7 +70,6 @@ export async function createEmployee(employeeData) {
   return handleResponse(response);
 }
 
-// Обновить сотрудника
 export async function updateEmployee(id, employeeData) {
   const token = localStorage.getItem("accessToken");
 
@@ -92,7 +85,6 @@ export async function updateEmployee(id, employeeData) {
   return handleResponse(response);
 }
 
-// Удалить сотрудника
 export async function deleteEmployee(id) {
   const token = localStorage.getItem("accessToken");
 

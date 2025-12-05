@@ -110,7 +110,6 @@
   box-sizing: border-box;
 }
 
-/* Увеличиваем размер выпадающего списка центров */
 .adminservices-input-group select {
   height: 46px;
   font-size: 15px;
@@ -183,7 +182,6 @@
   font-size: 14px;
 }
 
-/* Стили для подсказки о центрах */
 .centers-hint {
   color: #666;
   font-size: 12px;
