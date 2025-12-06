@@ -1,7 +1,7 @@
 .adminservices-container {
   display: flex;
   background-color: #f5f3ef;
-  height: 100%;
+  height: calc(100vh - 80px);
   box-sizing: border-box;
   padding: 30px 40px;
   gap: 40px;
@@ -19,6 +19,12 @@
   box-sizing: border-box;
 }
 
+.adminservices-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
 .adminservices-item {
   display: flex;
   align-items: flex-start;
@@ -31,7 +37,7 @@
   font-weight: 500;
   color: #333;
   cursor: pointer;
-  transition: background-color 0.3s, border-color 0.3s;
+  transition: background-color 0.3s, border-color 0.3s, color 0.3s;
   text-align: left;
 }
 
@@ -46,19 +52,8 @@
   font-weight: bold;
 }
 
-.adminservices-center-info {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
 .adminservices-center-name {
   font-weight: 600;
-}
-
-.adminservices-center-address {
-  font-size: 13px;
-  color: #666;
 }
 
 .adminservices-right {
@@ -69,8 +64,10 @@
   padding: 30px 35px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   gap: 20px;
+
+  max-height: 100%;
+  overflow: hidden;
 }
 
 .adminservices-header {
@@ -85,33 +82,38 @@
   color: #333;
 }
 
-.adminservices-addservice {
+.adminservices-add-btn {
   background: #66070f;
   color: #fff;
   border: none;
-  border-radius: 50%;
-  width: 34px;
-  height: 34px;
-  font-size: 20px;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 14px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
-.adminservices-addservice:hover {
+.adminservices-add-btn:hover {
   background-color: #8e444b;
 }
 
 .adminservices-table {
-  background: #fff;
+  background: #faf7f3;
   border-radius: 8px;
+  border: 1px solid #ddd;
+  padding: 12px 14px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
+
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .adminservices-row {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: 2fr 1.2fr 1fr;
   gap: 12px;
   align-items: center;
 }
@@ -119,7 +121,6 @@
 .adminservices-row-header {
   font-weight: 600;
   color: #333;
-  text-align: left;
 }
 
 .adminservices-cell {
@@ -135,8 +136,8 @@
 
 .adminservices-cell.header {
   border: none;
-  background-color: #fff;
-  padding: 6px 10px;
+  background-color: transparent;
+  padding: 4px 0;
   font-weight: 600;
 }
 
@@ -160,4 +161,14 @@
 
 .adminservices-save:hover {
   background-color: #8e444b;
+}
+
+.adminservices-error {
+  color: #b00020;
+  font-size: 14px;
+}
+
+.adminservices-info {
+  color: #333;
+  font-size: 14px;
 }

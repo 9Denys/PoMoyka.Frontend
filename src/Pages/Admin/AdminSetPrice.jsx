@@ -1,320 +1,391 @@
-import React, { useState, useEffect } from "react";
-import {
-  getAllCenters,
-  getCenterById,
-  getAllServices,
-  getServiceTypes,
-  createServiceType,
-  updateServiceType,
-  updateCenterServicePrice
-} from "../../api/setpriceApi";
+import React, { useEffect, useState } from "react";
 import "./AdminSetPrice.css";
+
+import {
+  getCenters,
+  getCenterServices,
+  getAllServices,
+  getAllTypeServices,
+  createTypeService,
+  createCenterService,
+  updateCenterServicePrice,
+} from "../../api/setpriceApi";
 
 export default function AdminSetPrice() {
   const [centers, setCenters] = useState([]);
-  const [selectedCenter, setSelectedCenter] = useState(null);
-  const [services, setServices] = useState([]);
+  const [selectedCenterId, setSelectedCenterId] = useState(null);
+
   const [centerServices, setCenterServices] = useState([]);
+
+  const [allServices, setAllServices] = useState([]);
+  const [allTypeServices, setAllTypeServices] = useState([]);
+
   const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [info, setInfo] = useState("");
 
-  // Загрузка центров
-  const loadCenters = async () => {
-    try {
-      setLoading(true);
-      const data = await getAllCenters();
-      setCenters(data);
-      
-      if (data.length > 0 && !selectedCenter) {
-        await selectCenter(data[0]);
+  const carTypes = [
+    { value: "hatchback", label: "Hatchback" },
+    { value: "crossover", label: "CrossOver" },
+    { value: "suv", label: "SUV" },
+  ];
+
+  const normalizeCarType = (raw) => {
+    if (!raw) return "";
+    const v = String(raw).toLowerCase();
+    if (v === "hatchback" || v === "crossover" || v === "suv") return v;
+    return v;
+  };
+
+  const normalizeName = (s) => (s || "").trim();
+
+  useEffect(() => {
+    const loadGlobals = async () => {
+      try {
+        const [services, typeServices] = await Promise.all([
+          getAllServices(),
+          getAllTypeServices(),
+        ]);
+        setAllServices(services || []);
+        setAllTypeServices(typeServices || []);
+        console.log("ALL SERVICES:", services);
+        console.log("ALL TYPE SERVICES:", typeServices);
+      } catch (err) {
+        console.error(err);
+        setError("Failed to load services/typeServices");
       }
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
-  // Загрузка всех услуг
-  const loadServices = async () => {
-    try {
-      const data = await getAllServices();
-      setServices(data);
-    } catch (err) {
-      console.error("Failed to load services:", err);
-    }
-  };
+    loadGlobals();
+  }, []);
 
-  // Выбор центра
-  const selectCenter = async (center) => {
+  useEffect(() => {
+    const loadCentersList = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const list = await getCenters();
+        setCenters(list || []);
+
+        if (list && list.length > 0) {
+          const firstCenterId = list[0].id;
+          setSelectedCenterId(firstCenterId);
+          await loadCenterServices(firstCenterId);
+        }
+      } catch (err) {
+        console.error(err);
+        setError("Failed to load centers");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadCentersList();
+  }, []);
+
+  const loadCenterServices = async (centerId) => {
     try {
       setLoading(true);
-      setSelectedCenter(center);
-      
-      // Загружаем полную информацию о центре (включая услуги)
-      const fullCenter = await getCenterById(center.id);
-      
-      // Преобразуем данные центра в формат для таблицы
-      const formattedServices = await formatCenterServices(fullCenter.services || []);
-      setCenterServices(formattedServices);
-      
       setError("");
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+      setInfo("");
 
-  // Форматирование услуг центра для таблицы
-  const formatCenterServices = async (centerServices) => {
-    if (!centerServices.length) return [];
+      const list = await getCenterServices(centerId);
+      console.log("CENTER SERVICES RAW (GetAll):", list);
 
-    const formatted = [];
-    
-    // Группируем услуги по названию
-    const servicesMap = {};
-    
-    centerServices.forEach(cs => {
-      if (!servicesMap[cs.serviceName]) {
-        servicesMap[cs.serviceName] = {
-          serviceName: cs.serviceName,
-          types: {},
-          centerServiceIds: {}
+      const mapped = (list || []).map((srv) => {
+        const srvNameNorm = normalizeName(srv.serviceName);
+
+        const sObj =
+          (allServices || []).find(
+            (s) => normalizeName(s.name) === srvNameNorm
+          ) || null;
+
+        return {
+          centerServiceId: srv.id,
+          serviceId: sObj ? sObj.id : null,
+          serviceName: srvNameNorm, 
+          carType: normalizeCarType(srv.carType),
+          price: srv.price ?? "",
         };
-      }
-      servicesMap[cs.serviceName].types[cs.carType] = cs.price;
-      servicesMap[cs.serviceName].centerServiceIds[cs.carType] = cs.centerServiceId;
-    });
-
-    // Преобразуем в массив
-    for (const serviceName in servicesMap) {
-      const service = servicesMap[serviceName];
-      const serviceData = services.find(s => s.name === serviceName) || { id: null };
-      
-      formatted.push({
-        id: serviceData.id,
-        name: serviceName,
-        suv: service.types.SUV || service.types.suv || "",
-        sedan: service.types.Sedan || service.types.sedan || "",
-        hatchback: service.types.Hatchback || service.types.hatchback || "",
-        centerServiceIds: service.centerServiceIds
       });
-    }
 
-    return formatted;
-  };
-
-  // Загрузка типов автомобилей для услуги
-  const loadServiceTypes = async (serviceId) => {
-    try {
-      const types = await getServiceTypes(serviceId);
-      return types || [];
+      console.log(
+        "MAPPED CENTER SERVICES (GetAll, len):",
+        mapped.length,
+        mapped
+      );
+      setCenterServices(mapped);
     } catch (err) {
-      console.error(`Failed to load types for service ${serviceId}:`, err);
-      return [];
+      console.error(err);
+      setError("Failed to load center services");
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Обработчик изменения поля
-  const handleInputChange = async (index, field, value) => {
-    const updated = [...centerServices];
-    updated[index][field] = value;
-    setCenterServices(updated);
+  const findServiceByName = (name) => {
+    const norm = normalizeName(name);
+    if (!norm) return null;
+    return (
+      (allServices || []).find(
+        (s) => normalizeName(s.name) === norm
+      ) || null
+    );
   };
 
-  // Добавление новой услуги
-  const handleAddService = () => {
-    setCenterServices([
-      ...centerServices,
-      { 
-        id: null, 
-        name: "", 
-        suv: "", 
-        sedan: "", 
-        hatchback: "",
-        centerServiceIds: {}
-      }
-    ]);
-  };
+  const ensureTypeService = async (serviceId, carType, serviceNameForMsg) => {
+    if (!serviceId || !carType) return null;
 
-  // Сохранение цен
-  const handleSave = async () => {
-    if (!selectedCenter) {
-      setError("Please select a center");
-      return;
+    const normType = normalizeCarType(carType);
+
+    let existing =
+      (allTypeServices || []).find(
+        (t) =>
+          t.serviceId === serviceId &&
+          normalizeCarType(t.carType) === normType
+      ) || null;
+
+    if (existing) {
+      console.log("Found existing TypeService:", existing);
+      return existing.id;
     }
 
     try {
-      setLoading(true);
-      setError("");
+      console.log("Creating TypeService:", {
+        serviceId,
+        carType: normType,
+      });
 
-      // Сохраняем каждую услугу
-      for (const service of centerServices) {
-        if (!service.name.trim()) continue;
+      await createTypeService({
+        serviceId,
+        carType: normType,
+      });
 
-        // Находим ID услуги по имени
-        const serviceData = services.find(s => s.name === service.name);
-        if (!serviceData && !service.id) {
-          console.warn(`Service "${service.name}" not found`);
+      const refreshed = await getAllTypeServices();
+      setAllTypeServices(refreshed || []);
+
+      const created =
+        (refreshed || []).find(
+          (t) =>
+            t.serviceId === serviceId &&
+            normalizeCarType(t.carType) === normType
+        ) || null;
+
+      if (created) {
+        console.log("Found/created TypeService:", created);
+        return created.id;
+      }
+
+      setError(
+        `Не удалось найти TypeService для "${serviceNameForMsg}" и "${normType}" после создания.`
+      );
+      return null;
+    } catch (err) {
+      console.error("Failed to create TypeService", err);
+      setError(
+        `Ошибка при создании TypeService для "${serviceNameForMsg}" и "${normType}".`
+      );
+      return null;
+    }
+  };
+
+  const updateField = (index, field, value) => {
+    setCenterServices((prev) => {
+      const updated = [...prev];
+      const item = { ...updated[index] };
+
+      if (field === "serviceName") {
+        item.serviceName = value;
+        const s = findServiceByName(value);
+        item.serviceId = s ? s.id : null;
+      } else if (field === "carType") {
+        item.carType = value;
+      } else if (field === "price") {
+        item.price = value;
+      } else {
+        item[field] = value;
+      }
+
+      updated[index] = item;
+      return updated;
+    });
+  };
+
+  const handleSave = async () => {
+    if (!selectedCenterId) return;
+
+    setSaving(true);
+    setError("");
+    setInfo("");
+
+    try {
+      for (const item of centerServices) {
+        if (!item.price) continue;
+
+        if (item.centerServiceId) {
+          console.log("Updating CenterService price:", {
+            centerServiceId: item.centerServiceId,
+            price: Number(item.price),
+          });
+
+          await updateCenterServicePrice(
+            item.centerServiceId,
+            Number(item.price)
+          );
           continue;
         }
 
-        const serviceId = service.id || serviceData?.id;
-
-        // Сохраняем цены для каждого типа автомобиля
-        const carTypes = [
-          { type: 'SUV', price: service.suv },
-          { type: 'Sedan', price: service.sedan },
-          { type: 'Hatchback', price: service.hatchback }
-        ];
-
-        for (const carType of carTypes) {
-          if (carType.price) {
-            const centerServiceId = service.centerServiceIds?.[carType.type];
-            
-            if (centerServiceId) {
-              // Обновляем существующую цену
-              await updateCenterServicePrice(centerServiceId, { 
-                price: parseFloat(carType.price) 
-              });
-            } else if (serviceId && selectedCenter.id) {
-              // Сначала создаем связь услуга-тип автомобиля
-              // TODO: Здесь нужен endpoint для создания связи центр-услуга
-              // Пока просто логируем
-              console.log(`Need to create: ${service.name} - ${carType.type} - ${carType.price}`);
-            }
-          }
+        if (!item.serviceId || !item.carType) {
+          console.warn("Skip row: serviceId or carType is empty", item);
+          continue;
         }
+
+        const typeServiceId = await ensureTypeService(
+          item.serviceId,
+          item.carType,
+          item.serviceName
+        );
+
+        if (!typeServiceId) {
+          console.warn("Cannot get typeServiceId for row", item);
+          continue;
+        }
+
+        const body = {
+          price: Number(item.price),
+          centerId: selectedCenterId,
+          typeServiceId,
+        };
+
+        console.log("Creating CenterService with body:", body);
+
+        const createdCS = await createCenterService(body);
+        console.log("Created CenterService response:", createdCS);
       }
 
-      // Обновляем данные центра
-      await selectCenter(selectedCenter);
-      alert("Prices saved successfully!");
+      setInfo("Prices saved successfully!");
+      await loadCenterServices(selectedCenterId);
     } catch (err) {
-      setError(err.message);
+      console.error(err);
+      setError("Failed to save prices");
     } finally {
-      setLoading(false);
+      setSaving(false);
     }
   };
 
-  // Инициализация
-  useEffect(() => {
-    loadCenters();
-    loadServices();
-  }, []);
+  const addNewRow = () => {
+    setCenterServices((prev) => [
+      ...prev,
+      {
+        centerServiceId: null,
+        serviceId: null,
+        serviceName: "",
+        carType: "",
+        price: "",
+      },
+    ]);
+  };
 
   return (
     <div className="adminservices-container">
       <div className="adminservices-left">
+        <h3 className="adminservices-title">Centers</h3>
+
+        {loading && centers.length === 0 && (
+          <p className="adminservices-info">Loading centers...</p>
+        )}
+
         {centers.map((center) => (
           <button
             key={center.id}
-            className={`adminservices-item ${
-              selectedCenter?.id === center.id ? "active" : ""
-            }`}
-            onClick={() => selectCenter(center)}
-            disabled={loading}
+            className={
+              "adminservices-item" +
+              (selectedCenterId === center.id ? " active" : "")
+            }
+            onClick={() => {
+              setSelectedCenterId(center.id);
+              loadCenterServices(center.id);
+            }}
           >
-            <span className="adminservices-icon">≡</span>
-            <div className="adminservices-center-info">
-              <div className="adminservices-center-name">{center.name}</div>
-              <div className="adminservices-center-address">
-                {center.address || "No address"}
-              </div>
-            </div>
+            <span className="adminservices-icon">🏢</span>
+            <div className="adminservices-center-name">{center.name}</div>
           </button>
         ))}
       </div>
 
       <div className="adminservices-right">
         <div className="adminservices-header">
-          <h3>Manage Services for {selectedCenter?.name || "Select Center"}</h3>
-          <button
-            className="adminservices-addservice"
-            onClick={handleAddService}
-            disabled={loading || !selectedCenter}
-          >
-            ＋
+          <h3>Manage Center Services & Pricing</h3>
+          <button className="adminservices-add-btn" onClick={addNewRow}>
+            + Add Service
           </button>
         </div>
+
+        {error && <p className="adminservices-error">{error}</p>}
+        {info && <p className="adminservices-info">{info}</p>}
 
         <div className="adminservices-table">
           <div className="adminservices-row adminservices-row-header">
             <div className="adminservices-cell header">Service</div>
-            <div className="adminservices-cell header">SUV ($)</div>
-            <div className="adminservices-cell header">Sedan ($)</div>
-            <div className="adminservices-cell header">Hatchback ($)</div>
+            <div className="adminservices-cell header">Car Type</div>
+            <div className="adminservices-cell header">Price</div>
           </div>
 
-          {centerServices.map((service, index) => (
-            <div className="adminservices-row" key={index}>
+          {centerServices.map((srv, index) => (
+            <div key={index} className="adminservices-row">
               <select
                 className="adminservices-cell"
-                value={service.name}
-                onChange={(e) => handleInputChange(index, "name", e.target.value)}
-                disabled={loading}
+                value={srv.serviceName}
+                onChange={(e) =>
+                  updateField(index, "serviceName", e.target.value)
+                }
               >
-                <option value="">Select Service</option>
-                {services.map(s => (
-                  <option key={s.id} value={s.name}>
-                    {s.name}
+                <option value="">Select service</option>
+                {allServices.map((s) => {
+                  const normName = normalizeName(s.name);
+                  return (
+                    <option key={s.id} value={normName}>
+                      {s.name}
+                    </option>
+                  );
+                })}
+              </select>
+
+              <select
+                className="adminservices-cell"
+                value={srv.carType}
+                onChange={(e) =>
+                  updateField(index, "carType", e.target.value)
+                }
+              >
+                <option value="">Select car type</option>
+                {carTypes.map((t) => (
+                  <option key={t.value} value={t.value}>
+                    {t.label}
                   </option>
                 ))}
               </select>
+
               <input
-                type="number"
                 className="adminservices-cell"
-                placeholder="SUV price"
-                value={service.suv}
-                onChange={(e) => handleInputChange(index, "suv", e.target.value)}
-                disabled={loading}
-                min="0"
-                step="0.01"
-              />
-              <input
                 type="number"
-                className="adminservices-cell"
-                placeholder="Sedan price"
-                value={service.sedan}
-                onChange={(e) => handleInputChange(index, "sedan", e.target.value)}
-                disabled={loading}
+                value={srv.price}
+                onChange={(e) => updateField(index, "price", e.target.value)}
+                placeholder="0"
                 min="0"
-                step="0.01"
-              />
-              <input
-                type="number"
-                className="adminservices-cell"
-                placeholder="Hatchback price"
-                value={service.hatchback}
-                onChange={(e) => handleInputChange(index, "hatchback", e.target.value)}
-                disabled={loading}
-                min="0"
-                step="0.01"
               />
             </div>
           ))}
-          
-          {centerServices.length === 0 && (
-            <div className="adminservices-row">
-              <div className="adminservices-cell empty-message" colSpan="4">
-                {selectedCenter 
-                  ? "No services configured for this center. Add a service to get started."
-                  : "Select a center to manage its services."
-                }
-              </div>
-            </div>
-          )}
         </div>
 
-        {error && <p className="auth-error">{error}</p>}
-
-        <button 
-          className="adminservices-save" 
+        <button
+          className="adminservices-save"
           onClick={handleSave}
-          disabled={loading || !selectedCenter || centerServices.length === 0}
+          disabled={saving}
         >
-          {loading ? "Saving..." : "Save Prices"}
+          {saving ? "Saving..." : "Save"}
         </button>
       </div>
     </div>

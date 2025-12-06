@@ -18,7 +18,7 @@ function Services() {
             <p className="services-desc">
               Deep cleaning of seats, carpets, floor mats, and door upholstery (4 pcs), trunk area, plastic part detailing and protection using steam, tornado gun, and premium auto cosmetics.
             </p>
-            <p className="services-cost">Cost from €70</p>
+            <p className="services-cost">Cost from ₴2800</p>
           </div>
         </section>
 
@@ -30,7 +30,7 @@ function Services() {
             <p className="services-desc">
               Deep cleaning of leather seats, carpets, mats (4 pcs), leather door panels (4 pcs), trunk area, plastic detailing and protection using steam, tornado gun, and high-quality detailing products.
             </p>
-            <p className="services-cost">Cost from €70</p>
+            <p className="services-cost">Cost from ₴2800</p>
           </div>
         </section>
 
@@ -42,7 +42,7 @@ function Services() {
             <p className="services-desc">
               Comprehensive exterior wash using pH-neutral shampoo, wheel cleaning, tire dressing, and glass treatment for perfect shine and protection.
             </p>
-            <p className="services-cost">Cost from €70</p>
+            <p className="services-cost">Cost from ₴2800</p>
           </div>
         </section>
 
@@ -54,7 +54,7 @@ function Services() {
           <div className="services-item">
             <div className="services-item-left">
               <p className="services-item-name">Engine Bay Cleaning</p>
-              <p className="services-item-cost">Cost from €70</p>
+              <p className="services-item-cost">Cost from ₴2800</p>
             </div>
             <div className="services-item-right">
               <p><strong>Detail & Protect</strong><br />
@@ -65,7 +65,7 @@ function Services() {
           <div className="services-item">
             <div className="services-item-left">
               <p className="services-item-name">Premium Detailing</p>
-              <p className="services-item-cost">Cost from €70</p>
+              <p className="services-item-cost">Cost from ₴2800</p>
             </div>
             <div className="services-item-right">
               <p><strong>Full Restoration Package</strong><br />

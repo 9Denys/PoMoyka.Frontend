@@ -5,13 +5,14 @@ import Footer from "../../Components/Footer/Footer";
 import {
   getCenters,
   getCenterById,
-  getCenterPriceList,
+  getCenterServices, 
 } from "../../api/locationsApi";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 
 function Locations() {
   const [centers, setCenters] = useState([]);
   const [selectedCenterId, setSelectedCenterId] = useState(null);
+
   const [loadingCenters, setLoadingCenters] = useState(false);
   const [loadingServices, setLoadingServices] = useState(false);
   const [error, setError] = useState("");
@@ -33,14 +34,16 @@ function Locations() {
   const loadCenterServices = async (centerId) => {
     try {
       setLoadingServices(true);
-      const priceList = await getCenterPriceList(centerId);
 
+      const full = await getCenterById(centerId);
       setCenterInfo({
-        name: priceList.centerName,
-        address: priceList.address,
+        name: full.name,
+        address: full.address,
       });
 
-      setServices(priceList.services || []);
+      const all = await getCenterServices(centerId);
+
+      setServices(all || []);
     } catch (e) {
       console.error("Failed to load center services", e);
       setCenterInfo(null);
@@ -94,6 +97,7 @@ function Locations() {
     };
 
     loadCenters();
+   
   }, []);
 
   const currentCenter = useMemo(() => {
@@ -151,7 +155,9 @@ function Locations() {
           <aside className="locations-sidebar">
             <h2 className="locations-title">Active centers</h2>
 
-            {loadingCenters && <p className="locations-info">Loading centers...</p>}
+            {loadingCenters && (
+              <p className="locations-info">Loading centers...</p>
+            )}
             {error && <p className="locations-error">{error}</p>}
 
             {!loadingCenters && !error && centers.length === 0 && (
@@ -171,7 +177,6 @@ function Locations() {
                   }
                   onClick={() => handleCenterClick(center.id)}
                 >
-                {/*  <p className="location-id">ID {center.id}</p> */}
                   <h3 className="location-name">{center.name}</h3>
 
                   <p className="location-address">
@@ -225,7 +230,9 @@ function Locations() {
           </section>
 
           <section className="locations-details">
-            {loadingServices && <p className="locations-info">Loading services...</p>}
+            {loadingServices && (
+              <p className="locations-info">Loading services...</p>
+            )}
 
             {!loadingServices && centerInfo && (
               <>
@@ -251,7 +258,9 @@ function Locations() {
                           <span>{s.price} ₴</span>
                         </p>
                         {s.description && (
-                          <p className="service-description">{s.description}</p>
+                          <p className="service-description">
+                            {s.description}
+                          </p>
                         )}
                       </li>
                     ))}

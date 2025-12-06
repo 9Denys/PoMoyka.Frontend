@@ -1,116 +1,52 @@
-const API_BASE_URL = "https://pomoyka-backend.onrender.com";
+import { apiRequest } from "./httpClient";
 
-// Вспомогательная функция для обработки ответов
-async function handleResponse(response) {
-  if (!response.ok) {
-    throw new Error(`Request failed with status ${response.status}`);
-  }
-
-  const contentLength = response.headers.get('content-length');
-  if (contentLength === '0' || response.status === 204) {
-    return null;
-  }
-
-  return await response.json();
-}
-
-// Получить все центры
-export async function getAllCenters() {
-  const token = localStorage.getItem("accessToken");
-  const response = await fetch(`${API_BASE_URL}/api/Centers/GetAll`, {
+export function getCenters() {
+  return apiRequest("/api/Centers/GetAll", {
     method: "GET",
-    headers: {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json"
-    }
   });
-
-  return handleResponse(response);
 }
 
-// Получить центр по ID с полной информацией (включая услуги)
-export async function getCenterById(id) {
-  const token = localStorage.getItem("accessToken");
-  const response = await fetch(`${API_BASE_URL}/api/Centers/GetById/${id}`, {
+export function getCenterPriceList(centerId) {
+  return apiRequest(`/api/CentersServices/GetPriceList/${centerId}`, {
     method: "GET",
-    headers: {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json"
-    }
   });
-
-  return handleResponse(response);
 }
 
-// Получить все услуги
-export async function getAllServices() {
-  const token = localStorage.getItem("accessToken");
-  const response = await fetch(`${API_BASE_URL}/api/Service/GetAll`, {
+export function getCenterServices(centerId) {
+  return apiRequest(`/api/CentersServices/GetAll/${centerId}`, {
     method: "GET",
-    headers: {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json"
-    }
   });
-
-  return handleResponse(response);
 }
 
-// Получить типы автомобилей для услуги
-export async function getServiceTypes(serviceId) {
-  const token = localStorage.getItem("accessToken");
-  const response = await fetch(`${API_BASE_URL}/api/TypeService/GetById/${serviceId}`, {
+export function getAllServices() {
+  return apiRequest("/api/Service/GetAll", {
     method: "GET",
-    headers: {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json"
-    }
   });
-
-  return handleResponse(response);
 }
 
-// Создать тип автомобиля для услуги
-export async function createServiceType(serviceTypeData) {
-  const token = localStorage.getItem("accessToken");
-  const response = await fetch(`${API_BASE_URL}/api/TypeService/Create`, {
+export function getAllTypeServices() {
+  return apiRequest("/api/TypeService/GetAll", {
+    method: "GET",
+  });
+}
+
+export function createTypeService(body) {
+  return apiRequest(`/api/TypeService/Create`, {
     method: "POST",
-    headers: {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(serviceTypeData)
+    body,
   });
-
-  return handleResponse(response);
 }
 
-// Обновить тип автомобиля для услуги
-export async function updateServiceType(id, serviceTypeData) {
-  const token = localStorage.getItem("accessToken");
-  const response = await fetch(`${API_BASE_URL}/api/TypeService/Update/${id}`, {
-    method: "PUT",
-    headers: {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(serviceTypeData)
+export function createCenterService(body) {
+  return apiRequest(`/api/CentersServices/Create`, {
+    method: "POST",
+    body,
   });
-
-  return handleResponse(response);
 }
 
-// Обновить цену услуги в центре
-export async function updateCenterServicePrice(id, priceData) {
-  const token = localStorage.getItem("accessToken");
-  const response = await fetch(`${API_BASE_URL}/api/CentersServices/Update/${id}`, {
+export function updateCenterServicePrice(centerServiceId, price) {
+  return apiRequest(`/api/CentersServices/Update/${centerServiceId}`, {
     method: "PUT",
-    headers: {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(priceData)
+    body: { price },
   });
-
-  return handleResponse(response);
 }
